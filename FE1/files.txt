@@ -1,0 +1,8 @@
+NAME: fname2.txt        SIZE: 252 bytes
+NAME: fe1.c        SIZE: 7715 bytes
+NAME: files.txt        SIZE: 0 bytes
+NAME: fe1        SIZE: 17728 bytes
+NAME: fname1.txt        SIZE: 252 bytes
+NAME: output.log        SIZE: 25 bytes
+NAME: error.log        SIZE: 33 bytes
+NAME: makefile        SIZE: 34 bytes
