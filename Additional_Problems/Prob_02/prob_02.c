@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 
 int f1() {
@@ -129,10 +132,155 @@ int f3b(int argc, char* argv[]) {
 }
 
 
+
+//4
+int f4a() {
+    int f1 = open("students.txt",O_WRONLY | O_TRUNC);
+    char name[51],grade[4],c; //"xx\n\0"
+    while (1) {
+        memset(name,0,sizeof(name));
+        memset(name,0,sizeof(grade));
+
+        printf("Student name (max 50 chars): ");
+        for (int i = 0; ((c=getchar()) != '\n' && c != EOF) && i < 50 ; i++) {
+            name[i] = c;
+        }
+        if (c != '\n') 
+            while ((c=getchar()) != '\n');
+        name[strlen(name)]=' ';
+        name[strlen(name)]='\0';
+
+        printf("Grade (0-20): ");
+        for (int i = 0; (c=getchar()) != '\n' && c != EOF && i < 2 ; i++) {
+            grade[i] = c;
+        }
+        if (c != '\n') 
+            while ((c=getchar()) != '\n');
+        printf("%ld\n", strlen(grade));
+        grade[2]='\n';
+        grade[3]='\0';
+        write(f1,name,strlen(name));
+        write(f1,grade,strlen(grade));
+    }
+    return 0;
+}
+
+struct student {
+    char* name;
+    int grade;    
+};
+
+
+int f4b() {
+    int f1 = open("students.txt",O_WRONLY | O_TRUNC);
+    char name[51],grade[4],c; //"xx\n\0"
+    struct student s;
+    while (1) {
+        memset(name,0,sizeof(name));
+        memset(name,0,sizeof(grade));
+
+        printf("Student name (max 50 chars): ");
+        for (int i = 0; ((c=getchar()) != '\n' && c != EOF) && i < 50 ; i++) {
+            name[i] = c;
+        }
+        if (c != '\n') 
+            while ((c=getchar()) != '\n');
+        name[strlen(name)]=' ';
+        name[strlen(name)]='\0';
+
+        printf("Grade (0-20): ");
+        for (int i = 0; (c=getchar()) != '\n' && c != EOF && i < 2 ; i++) {
+            grade[i] = c;
+        }
+        if (c != '\n') 
+            while ((c=getchar()) != '\n');
+        printf("%ld\n", strlen(grade));
+        grade[2]='\n';
+        grade[3]='\0';
+        s.name = name;
+        s.grade = atoi(grade);
+        write(f1,&s,sizeof(struct student));
+    }
+}
+//não é possivel usar o cat pois o ficheiro é binário e não de texto
+
+
+
+//5
+int p5a(void)
+{
+    int fd;
+    char *text1="AAAAA";
+    char *text2="BBBBB";
+    fd = open("f1.txt",O_CREAT|O_EXCL|O_TRUNC|O_WRONLY|O_SYNC,0600); //Só escreve no ficheiro se o ficheiro não estiver criado
+    write(fd,text1,5);
+    write(fd,text2,5);
+    close(fd);
+    return 0;
+}
+
+int p5b(void)
+{
+    int fd;
+    char *text1="CCCCC";
+    char *text2="DDDDD";
+    fd = open("f1.txt", O_WRONLY|O_SYNC); //escreve sempre no ficheiro (sobrepõe ao que está lá)
+    write(fd,text1,5);
+    write(fd,text2,5);
+    close(fd);
+    return 0;
+}
+
+
+
+//6
+int f6(int argc, char *argv[])
+{
+    DIR *dirp;
+    struct dirent *direntp;
+    struct stat stat_buf;
+    char *str;
+    if (argc != 2) { 
+        fprintf(stderr, "Usage: %s dir_name\n", argv[0]);
+        exit(1);
+    }
+    if ((dirp = opendir(argv[1])) == NULL) {
+        perror(argv[1]);
+        exit(2);
+    }
+    while ((direntp = readdir(dirp)) != NULL) {
+        if (stat(direntp->d_name, &stat_buf) != 0) {
+            perror("Error:"); //a)
+        }
+        if (S_ISREG(stat_buf.st_mode)) str = "regular";
+        else if (S_ISDIR(stat_buf.st_mode)) str = "directory";
+        else str = "other";
+        printf("%-25s - %s - %ld\n", direntp->d_name, str, direntp->d_ino); //b)
+    }
+    closedir(dirp);
+    exit(0);
+}
+//c)
+//hardlink -> same type of source
+//symbolic link -> type: symbolic link
+
+//d)
+//lstat -> if is a symbolic links return the info about the symbolic link
+//stat -> if is a symbolic links return the info about the link itself
+
+//e)
+//ao eliminar o temp.txt o temp2.txt é como se não existi-se mas o temp1.txt continua
+
+
 int main(int argc, char* argv[], char* envp[]) {
 	//return f1();
     //return f2a(argc,argv);
     //return f2b(argc,argv);
     //return f3a(argc, argv);
     //return f3b(argc,argv); 
+    //return f4a();
+    //return f4b();
+    //return p5a();   //CCCCCDDDDD
+    //return p5b(); //CCCCCDDDDD
+    return f6(argc,argv);
 }

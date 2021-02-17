@@ -1,0 +1,4 @@
+Crie um ficheiro de texto (temp.txt), com um conteúdo qualquer, no seu directório corrente. Crie um
+hardlink (temp1.txt) e um symbolic link (temp2.txt) para esse ficheiro. Execute o programa da alínea
+anterior e interprete o resultado no que diz respeito ao tamanho do ficheiro de texto original e dos dois
+links

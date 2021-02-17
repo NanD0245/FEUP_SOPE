@@ -4,8 +4,9 @@
 #include <fcntl.h>
 
 int main() {
-	int	f1 = open("example.txt",O_WRONLY);
-	int a = dup(f1);
-	write(a,"Ola example.txt\n",16);
-	return 0;
+	char a = getchar();
+	char b = getchar();
+	printf("%c\n", a);
+	printf("%c\n", b);
+	return 0;	
 }
