@@ -161,10 +161,10 @@ int f6(int argc, char* argv[], char* env[]) {
 
 
 //7
-/*An operating system has three main functions: (1) manage the computer's resources, such as the central processing unit, memory, disk drives, 
-and printers, (2) establish a user interface, and (3) execute and provide services for applications software.*/
-//Existem 3 main functions??
-
+/*
+Uma das funções main do OS é disponibilizar camada de abstraçao para não lidar com hardware (impressoras, etc)
+segurança -> garantir que os nossos processos n façam "asneiras" na memoria, espaço, etc e garante a não mistura de processos
+*/
 
 
 //8
@@ -210,8 +210,6 @@ int f10b() { // using <sys/times.h>
 	printf("Clock: %.5f sec\n",(double)(end - start) / ticks);
 	printf("User time: %.5f sec\n",(double)(t.tms_utime)/ticks);
 	printf("System time: %.5f sec\n",(double)(t.tms_stime)/ticks);
-	//printf("Children user time: %.5f sec\n",(double)(t.tms_cutime)/ticks);
-	//printf("Children system time: %.5f sec\n",(double)(t.tms_cstime)/ticks);
 	return 0;
 }
 
