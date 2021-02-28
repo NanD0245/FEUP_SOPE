@@ -68,11 +68,11 @@ c)systemd -> yakuake -> bash -> pstree
 
 
 /*4
-Ready -> New
 New -> Running
 Running -> Blocked
-Running -> Ready
 Blocked -> Ready
+Running -> Ready
+Ready -> Running
 Ready -> Terminated
 */
 
@@ -96,13 +96,14 @@ int f5() {
 }
 
 int f5reverse() {
-	printf("Hello ");
-	fflush(stdout);
+	//fflush(stdout);
 	int id = fork();
 	switch(id) {
 		case 0:
 			printf("World!\n");
 			break;
+		default:
+			printf("Hello ");
 	}
 	return 0;
 }
@@ -116,10 +117,9 @@ int f5reverse() {
 
 
 //7
- 
 
 int main() {
-	return f6();
+	return f5reverse();
 }
 
 //Hello Hello World!

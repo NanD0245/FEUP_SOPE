@@ -7,6 +7,7 @@
 #include <errno.h> //errno
 #include <dirent.h> //dirent
 #include <sys/stat.h> //stat
+#include <sys/wait.h>
 
 
 /*1.
@@ -183,8 +184,37 @@ segurança -> garantir que os nossos processos n façam "asneiras" na memoria, e
 
 //10
 int f10a() { // exec with "time ./fe1"
-	for (int i = 0; i < 100000; i++)
-		printf("Hello world!\n");
+	int i = 2;
+	for (int k = 0; k < 10000000000; k++) {
+		i += 2;
+		//printf("%d\n",i);
+		if (i == 0)
+			break;
+	}
+	return 0;
+}
+
+int f10afork() {
+	int i=0,j=0;
+	int id = fork();
+	
+		switch (id) {
+			case 0:
+				for (int k = 0; k < 1000000000; k++)
+					i+=2;
+				break;
+			default:
+				for (int k = 0; k < 1000000000; k++)
+					j+=2;
+				break;
+		}
+	//printf("%d\n", i);
+	wait(NULL);
+	if (id == 0)
+		exit(0);
+
+	
+	//printf("%d\n",i+j);
 	return 0;
 }
 
@@ -201,15 +231,52 @@ int f10b() { // using <sys/times.h>
 	int long ticks = sysconf(_SC_CLK_TCK);
 
 	start = times(&t); /* início da medição de tempo */
-
-	for (int i = 0; i < 100000; i++)
-		printf("Hello world!\n");
+	int k = 0;
+	for (int i = 0; i < 2000000000; i++)
+		k+=2;
 
 	end = times(&t); 
 
 	printf("Clock: %.5f sec\n",(double)(end - start) / ticks);
 	printf("User time: %.5f sec\n",(double)(t.tms_utime)/ticks);
 	printf("System time: %.5f sec\n",(double)(t.tms_stime)/ticks);
+	printf("Child User time: %.5f sec\n", (double)(t.tms_cutime)/ticks);
+	printf("Child System time: %.5f sec\n", (double)(t.tms_cstime)/ticks);
+	return 0;
+}
+
+int f10bfork() { // using <sys/times.h>
+	clock_t start, end;
+	struct tms t;
+	int long ticks = sysconf(_SC_CLK_TCK);
+
+	start = times(&t); /* início da medição de tempo */
+	int k = 0;
+
+	int id = fork();
+	//for (int i = 0; i < 5000000; i++)
+		switch(id) {
+			case 0:
+				for (int i = 0; i < 1000000000; i++)
+					k+=2;
+				break;
+
+			default:
+				for (int i = 0; i < 1000000000; i++)
+					k+=2;
+
+				wait(NULL);
+
+				end = times(&t); 
+
+				printf("Clock: %.5f sec\n",(double)(end - start) / ticks);
+				printf("User time: %.5f sec\n",(double)(t.tms_utime)/ticks);
+				printf("System time: %.5f sec\n",(double)(t.tms_stime)/ticks);
+				printf("Child User time: %.5f sec\n", (double)(t.tms_cutime)/ticks);
+				printf("Child System time: %.5f sec\n", (double)(t.tms_cstime)/ticks);
+				break;
+		}
+
 	return 0;
 }
 
@@ -382,9 +449,11 @@ int main(int argc, char* argv[], char* env[]) {
 	//f5c(argc,argv,env);
 	//f6(argc,argv,env);
 	//f10a();
-	//f10b();
+	//f10afork();
+	f10b();
+	f10bfork();
 	//f11a(argc,argv);
-	f11b(argc,argv);
+	//f11b(argc,argv);
 	//f11c(argc,argv);
 	//f12a(argc,argv);
 	return 0;

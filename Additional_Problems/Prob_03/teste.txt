@@ -1,0 +1,12 @@
+/home/mim/Documents/FEUP/2ano/Cadeiras/2Semestre/SOPE/FEUP_SOPE/Additional_Problems/Prob_03:
+total 196
+drwxr-xr-x 2 mim mim   4096 fev 28 00:16 .
+drwxr-xr-x 5 mim mim   4096 fev 24 00:09 ..
+-rwxr-xr-x 1 mim mim  16096 fev 27 21:55 additional_file
+-rw-r--r-- 1 mim mim     79 fev 27 21:03 additional_file.c
+-rw-r--r-- 1 mim mim     46 fev 27 21:56 makefile
+-rwxr-xr-x 1 mim mim  17648 fev 28 00:16 prob03
+-rw-r--r-- 1 mim mim   7528 fev 28 00:16 prob03.c
+-rw-r--r-- 1 mim mim 133155 fev 24 00:09 Prob_03-Processos.pdf
+-rw-r--r-- 1 mim mim      0 fev 28 00:16 teste.txt
+-rw-r--r-- 1 mim mim     94 fev 28 00:15 tt
