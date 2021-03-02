@@ -124,7 +124,7 @@ int f5reverse() {
 
 //8
 void func(int signo) {
-	//fprintf(stderr, "\nReceived signal %d!\n", signo);
+	fprintf(stderr,"Hello!\n");
 }
 
 int f8() {
@@ -140,7 +140,7 @@ int f8() {
 	new.sa_flags = 0;	// usually works
 
 	if(sigaction(SIGUSR1, &new, &old) == -1)
-		perror ("sigaction");
+				perror ("sigaction");
 
 	pid_t pid = fork();
 	switch (pid) {
@@ -148,15 +148,14 @@ int f8() {
 			perror("fork failed");
 			return -1;
 		case 0:
-			printf("Hello ");
-			kill(getppid(),SIGUSR1);
+			sleep(1);
 			break;
 		default:
-			pause();
-			printf("World!\n");
+			fprintf(stderr,"World: ");
+			kill(pid,SIGUSR1);
+			wait(NULL);
 			break;
 	}
-
 	return 0;
 }
 
@@ -173,7 +172,7 @@ void *rot(void *a) {
 	return a;
 }
 
-int f9a() {
+int f9() {
 	int i; // thread counter
 	pthread_t ids[NTHREADS];	// storage of (system) Thread Identifiers
 
@@ -241,17 +240,28 @@ int f10() {
 	args->s2 = "Systems!\n";
 
 	for (int i = 0; i < 2; i++) {
+		if (i == 1) sleep(1);
 		if (pthread_create(&ids[i],NULL,print,(void*)args) != 0)
 			exit(-1);	// here, we decided to end process
-		//sleep(1);
-		pthread_join(ids[i],NULL);
 	}
 
-	/*for (int i = 0; i < 2; i++) { //how to wait???
+	for (int i = 0; i < 2; i++) { //how to wait???
 		pthread_join(ids[i],NULL);
-	}*/
+	}
 	return 0;
 }
+
+
+
+//11
+PIPE 													FIFO
+
+-PIPES doesn’t exist in the filesystem.					-FIFO exists in the filesystem.
+-PIPES are unidirectional.								-FIFO are bi-directional same fifo can be used for reading and writing.
+
+
+
+//12
 
 int main() {
 	return f10();
