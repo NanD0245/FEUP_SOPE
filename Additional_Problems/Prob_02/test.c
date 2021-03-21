@@ -1,6 +1,7 @@
 // C program to print all combination of size r in an array 
 // of size n with repetitions allowed 
 #include <stdio.h> 
+#include <string.h>
   
 /* arr[]  ---> Input Array 
   chosen[] ---> Temporary array to store indices of 
@@ -47,9 +48,10 @@ void CombinationRepetition(int arr[], int n, int r)
 // Driver program to test above functions 
 int main() 
 { 
-    int arr[] = {1, 2, 3, 4}; 
-    int n = sizeof(arr)/sizeof(arr[0]); 
-    int r = 2; 
-    CombinationRepetition(arr, n, r); 
-    return 0; 
+    char buf[1024];
+    memset(buf,0,strlen(buf));
+    double a = 1234567;
+    sprintf(buf,"%4.2f",a);
+    printf("%s\n", buf);
+    return 0;
 } 

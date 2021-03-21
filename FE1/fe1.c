@@ -445,13 +445,13 @@ int main(int argc, char* argv[], char* env[]) {
 	//f3();
 	//f4();
 	//f5a(argc,argv,env);
-	//f5b(argc,argv,env);
+	f5b(argc,argv,env);
 	//f5c(argc,argv,env);
 	//f6(argc,argv,env);
 	//f10a();
 	//f10afork();
-	f10b();
-	f10bfork();
+	//f10b();
+	//f10bfork();
 	//f11a(argc,argv);
 	//f11b(argc,argv);
 	//f11c(argc,argv);

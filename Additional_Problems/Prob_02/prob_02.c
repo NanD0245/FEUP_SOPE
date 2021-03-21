@@ -249,13 +249,16 @@ int f6(int argc, char *argv[])
         exit(2);
     }
     while ((direntp = readdir(dirp)) != NULL) {
-        if (stat(direntp->d_name, &stat_buf) != 0) {
+        //direntp = readdir(dirp);
+        if (lstat(direntp->d_name, &stat_buf) != 0) {
+            printf("%s\n", direntp->d_name);
             perror("Error:"); //a)
         }
         if (S_ISREG(stat_buf.st_mode)) str = "regular";
         else if (S_ISDIR(stat_buf.st_mode)) str = "directory";
+        else if (S_ISLNK(stat_buf.st_mode)) str = "link";
         else str = "other";
-        printf("%-25s - %s - %ld\n", direntp->d_name, str, direntp->d_ino); //b)
+        printf("%-25s - %s - %ld - st_mode = %d\n", direntp->d_name, str, direntp->d_ino, stat_buf.st_mode); //b)
     }
     closedir(dirp);
     exit(0);
@@ -273,14 +276,5 @@ int f6(int argc, char *argv[])
 
 
 int main(int argc, char* argv[], char* envp[]) {
-	//return f1();
-    //return f2a(argc,argv);
-    //return f2b(argc,argv);
-    //return f3a(argc, argv);
-    //return f3b(argc,argv); 
-    //return f4a();
-    //return f4b();
-    //return p5a();   //CCCCCDDDDD
-    //return p5b(); //CCCCCDDDDD
-    return f6(argc,argv);
+	return f6(argc, argv);
 }

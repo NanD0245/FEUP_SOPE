@@ -3,6 +3,10 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <fcntl.h>
 
 
 //1
@@ -119,7 +123,7 @@ int f5reverse() {
 
 
 //7.
-
+//Asynchornous communication
 
 
 //8
@@ -254,14 +258,95 @@ int f10() {
 
 
 //11
+/*
 PIPE 													FIFO
 
 -PIPES doesn’t exist in the filesystem.					-FIFO exists in the filesystem.
 -PIPES are unidirectional.								-FIFO are bi-directional same fifo can be used for reading and writing.
-
+*/
 
 
 //12
+/*
+
+In a named pipe, the program described could be executed between unrelated processes to verify its premiss. 
+As such, two named pipes would be set up between both, one representing the color to send and to process by 
+the reading process, and one for the answer. The program would be as follows: the first process would write 
+to the first pipe the color, and the second process would read it, process it, and put its response on the 
+second pipe, which would be later read by the first process.
+
+Using normal pipes, this program could only be implemented between child and parent processes. As such, the 
+process could only verify that it had the color on its private pallete, using the corresponding pipe through 
+a child co-process. This could not be extended to other processes using normal pipes as they don't allow 
+unrelated process comunication.
+
+It is impossible to execute the program described using signals since they do not allow to send information. 
+Since there is no way to inform the second process what color he wants to refer to, the second process cannot 
+form a valid response and the premisse of the program fails.
+
+*/
+
+
+//13
+int f13a(){
+    int   n, fd[2];
+    pid_t pid;
+    char  line[10];
+    if (pipe(fd) < 0) {
+        perror("ERROR");
+        exit(1);
+    } 
+    if ( (pid = fork()) < 0) {
+        perror("ERROR");
+        exit(1);
+    } 
+    else if (pid > 0) {
+        close(fd[0]); 
+        write(fd[1], "Operating", 9);
+    } 
+    else {                      
+        close(fd[1]);           
+        n = read(fd[0], line, 10);
+        char* st = malloc(sizeof(char) * n);
+        memcpy(st, line, n);
+        printf("%s Systems", st);
+        free(st);
+    }
+    return 0;
+}
+
+int f13b(){
+    int   n;
+    pid_t pid;
+    char  line[10];
+    if (mkfifo("p1", 0666) < 0) {
+       	perror("ERROR");
+        exit(1);
+    } 
+    if ( (pid = fork()) < 0) {
+        perror("ERROR");
+        exit(1);
+    } 
+    else if (pid > 0) {
+    	int p1;
+    	while ((p1 = open("p1", O_WRONLY)) < 0);
+        write(p1, "Operating", 9);
+        close(p1);
+    } 
+    else {                      
+        int p1;
+    	while ((p1 = open("p1", O_RDONLY)) < 0);
+    	n = read(p1, line, 10);
+        char* st = malloc(sizeof(char) * n);
+        memcpy(st, line, n);
+        printf("%s Systems", st);
+        free(st);
+        close(p1);
+    }
+    return 0;
+}
+
+//f13c & f13d semelhante a f13a e f13b
 
 int main() {
 	return f10();
