@@ -29,7 +29,7 @@ If the strategy dictated by the statement were adopted, we would always have a r
 for each process, which did not make possible a continues allocating memory space for processes.
 */
 
-/*int f4() {
+int f4() {
     size_t size = 50 * pow(10,6);
     int sum = 0; 
     while(1) {
@@ -41,7 +41,7 @@ for each process, which did not make possible a continues allocating memory spac
     }
     printf("Rejected Malloc");
     return 0;
-}*/
+}
 
 
 //8
