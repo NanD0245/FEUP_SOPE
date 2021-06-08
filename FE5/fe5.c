@@ -74,9 +74,9 @@ int f7() {
 			perror("read failed");
 		}
 		else if (c == 127) {
-			write(STDOUT_FILENO, "\b\b\b   \b\b\b",9);
+			write(STDOUT_FILENO, "\b \b",3);
 		} else if (c != '\n') {
-			write(STDOUT_FILENO,"***",3);
+			printf("%c", '*');
 		}
 	} while (c != '\n');	// wait for [ENTER]
 
@@ -200,9 +200,10 @@ int f10b(int argc, char* argv[]) {
 
 
 int main(int argc, char* argv[]) {
+	setbuf(stdout, NULL);
 	//return f4();
-	//return f7();
+	return f7();
 	//return f10a();
-	return f10b(argc, argv);
+	//return f10b(argc, argv);
 	return 0;
 }
